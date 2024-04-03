@@ -10,39 +10,37 @@
 
 // Preambulo de funciones
 void delay (unsigned int tiempo);
-int rand();
-void roll_dice(unsigned int number);
+unsigned int rand();
 
 // Variables globales
-unsigned int seed = 22042; // Necesito encontrar la manera de obtener un valor de seed diferente cada vez que se llame la función
+unsigned int seed = 22032; // Necesito encontrar la manera de obtener un valor de seed diferente cada vez que se llame la función
 unsigned int led_matrix[] = {one, two, three, four, five, six};
+unsigned int rand_counter = 0; // Counter for updating seed
 
 // Funcion Main
 void main(void)
 {
-
     TRISIO = 0b00100000; //Poner todos los pines como salidas
 	GPIO = 0x00; //Poner pines en bajo
     ANSEL = 0x00; // Todas digitales
-
+    // unsigned int random;
     unsigned int time = 100;
 
     while (1)
-    {
+    {   
         if (GP5 == 1)
         {   
             unsigned int random = rand();
-            if (random > 6)
-            {
-                random = (random % 6) + 1;
-                roll_dice(random);
-            }else{
-                roll_dice(random);
-            }
+            random = (random % 6);
+
+            GPIO = led_matrix[random];
             delay(time);
+            GPIO = 0x00;
         }
     }
 }
+
+
 void delay(unsigned int tiempo)
 {
 	unsigned int i;
@@ -52,29 +50,14 @@ void delay(unsigned int tiempo)
 	  for(j=0;j<1275;j++);
 }
 
-int rand(){
-    int p = 20;
-    int q = 24;
 
-    seed = (seed*seed) % p*q;
+unsigned int rand(){
+    unsigned int p = 9802;
+    unsigned int q = 2348;
+    unsigned int random_num;
 
-    return seed;
-}
+    seed += rand_counter++;
+    random_num = (seed*seed) % p*q;
 
-void roll_dice(unsigned int number){ // Recibe el número del dado que se obtuvo de forma aleatoria y lo muestra en los LEDs
-    switch (number)
-    {
-    case 1:
-        GPIO = led_matrix[0];
-    case 2:
-        GPIO = led_matrix[1];
-    case 3:
-        GPIO = led_matrix[2];
-    case 4:
-        GPIO = led_matrix[3];
-    case 5:
-        GPIO = led_matrix[4];
-    case 6:
-        GPIO = led_matrix[5];
-    }
+    return random_num;
 }
