@@ -27,9 +27,8 @@ void main(void)
 {   
     TRISIO = 0b00100000; //Poner todos los pines como salidas
 	GPIO = 0x00; //Poner pines en bajo
-    ANSEL = 0x00; // Todas digitales
 
-    unsigned int time = 100;
+    unsigned int time = 200;
 
     while (1)
     {   
@@ -45,7 +44,6 @@ void main(void)
         }
     }
 }
-
 
 void delay(unsigned int tiempo)
 {
