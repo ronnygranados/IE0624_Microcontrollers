@@ -24,7 +24,7 @@
 volatile int boton;
 int estado_actual = esperando_boton;
 
-int segs = 0;
+volatile int segs = 0;
 // int un_seg = 0; // Un acumulador 
 // int tres_segs = 0;
 // int diez_segs = 0;
@@ -44,7 +44,16 @@ ISR(INT0_vect){ // Subrutina que alterna B1 entre 1 y 0
 }
 
 ISR(TIMER1_COMPA_vect){
+    // segs = segs + 10;
     segs++;
+    // if (segs >= 3*188) // Un segundo
+    // {
+    //     /* code */
+    //     PORTB |= (1 << RED_PEATON1); // Sí funciona
+    //     // segs = 0;
+    //     // PORTB &= ~(1 << RED_PEATON1);
+    // }
+    
 }
 
 // Inicio de la función main
@@ -55,6 +64,11 @@ int main(void)
     boton_init();
     sei();
     // timer_init();
+
+    TCCR1B = 0x00;
+    TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); // Esto me activa el prescaler de 1024 y el modo CTC
+    TIMSK |= (1 << OCIE1A);
+    OCR1A = 38; // Esto va a hacer que se genere una interrupción cada ~10ms
     
     DDRB |= (1 << RED_PEATON1) | (1 << GREEN_PEATON1) | (1 << RED_PEATON2) | (1 << GREEN_PEATON2); // Pines de semaforos peatonales como salidas
     DDRB |= (1 << RED_VEHICULAR) | (1 << GREEN_VEHICULAR); // Pines del semáforo vehicular como salidas
@@ -63,20 +77,26 @@ int main(void)
 
     while (1)
     {
-        fsm();
-        // if (boton == 1)
-        // {
-        //     for (int i = 0; i < 10; i++)
-        //     {
-        //         // PORTB ^= (1 << RED_PEATON1);
-        //         PORTB ^= (1 << RED_PEATON2) ^ (1 << RED_VEHICULAR);
-        //         _delay_ms(2000);
-        //     }
-        //     boton = 0;
-        // } else
-        // {
-        //     PORTB &= ~(1 << RED_PEATON1);
-        // }
+        // delay(3);
+        // PORTB |= (1 << RED_PEATON1);
+        // delay(1000);
+        // PORTB &= ~(1 << RED_PEATON1);
+        // delay(1000);
+        // fsm();
+        if (boton == 1)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                // PORTB ^= (1 << RED_PEATON1);
+                PORTB ^= (1 << RED_PEATON2) ^ (1 << RED_VEHICULAR);
+                // _delay_ms(2000);
+                delay(2);
+            }
+            boton = 0;
+        } else
+        {
+            PORTB &= ~(1 << RED_PEATON1);
+        }
     }
 }
 
@@ -91,7 +111,7 @@ void boton_init() { // Se establece para detectar flancos positivos en el pin PD
 void timer_init(){
     TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); // Esto me activa el prescaler de 1024 y el modo CTC
     TIMSK |= (1 << OCIE1A);
-    OCR1A = 18; // Esto va a hacer que se genere una interrupción cada ~10ms
+    OCR1A = 38; // Esto va a hacer que se genere una interrupción cada ~10ms
 }
 
 void cruzando(){
@@ -104,10 +124,9 @@ void detenido(){
     PORTB |= (1 << RED_PEATON1) | (1 << RED_PEATON2) | (1 << RED_VEHICULAR);
 }
 
-void delay(float seconds) {
-    TCNT1 = 0x00; // Reseteo del timer 1
+void delay(float seconds) { // Esta función sirve
     segs = 0; // Reseteo a la variable segs
-    while (segs < 15*seconds) { 
+    while (segs < 188*seconds) { 
         // No haga nada
     }
 }
@@ -122,9 +141,11 @@ void fsm(){
 
         if (boton == 1)
         {
-            _delay_ms(3000);
+            // _delay_ms(3000);
+            // delay()
             estado_actual = blink_vehicular;
         }
+        // estado_actual = blink_vehicular;
         break;
 
     case blink_vehicular:
