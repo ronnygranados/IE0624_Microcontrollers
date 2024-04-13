@@ -78,25 +78,44 @@ int main(void)
     while (1)
     {
         // delay(3);
-        // PORTB |= (1 << RED_PEATON1);
+        // PORTB |= (1 << GREEN_VEHICULAR);
         // delay(1000);
         // PORTB &= ~(1 << RED_PEATON1);
         // delay(1000);
-        // fsm();
-        if (boton == 1)
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                // PORTB ^= (1 << RED_PEATON1);
-                PORTB ^= (1 << RED_PEATON2) ^ (1 << RED_VEHICULAR);
-                // _delay_ms(2000);
-                delay(2);
-            }
-            boton = 0;
-        } else
-        {
-            PORTB &= ~(1 << RED_PEATON1);
-        }
+        fsm();
+        // PORTB |= (1 << GREEN_VEHICULAR);
+        // delay(0.01);
+        // PORTB |= (1 << RED_PEATON1);
+        // PORTB |= (1 << RED_PEATON2);
+
+        // // _nop();
+        // // PORTB |= (1 << RED_PEATON1) | (1 << RED_PEATON2);
+        // PORTB &= ~(1 << RED_VEHICULAR) & ~(GREEN_PEATON1) & ~(GREEN_PEATON2);
+
+        // if (boton == 1)
+        // {
+        //     for (int i = 0; i < 6; i++)
+        //     {
+        //         PORTB ^= (1 << GREEN_VEHICULAR);
+        //         delay(0.5);
+        //     }
+        //     PORTB = 0x00;
+        // }
+        
+        // if (boton == 1)
+        // {
+        //     for (int i = 0; i < 6; i++)
+        //     {
+        //         PORTB ^= (1 << RED_PEATON1);
+        //         // PORTB ^= (1 << RED_PEATON2) ^ (1 << RED_VEHICULAR);
+        //         // _delay_ms(2000);
+        //         delay(0.5);
+        //     }
+        //     boton = 0;
+        // } else
+        // {
+        //     PORTB &= ~(1 << RED_PEATON1);
+        // }
     }
 }
 
@@ -136,42 +155,49 @@ void fsm(){
     {
     case esperando_boton:
         // Carros pasan
-        PORTB |= (1 << GREEN_VEHICULAR) | (1 << RED_PEATON1) | (1 << RED_PEATON2);
+        PORTB |= (1 << GREEN_VEHICULAR);
+        delay(0.01);
+        PORTB |= (1 << RED_PEATON1) | (1 << RED_PEATON2);
         PORTB &= ~(1 << RED_VEHICULAR) & ~(GREEN_PEATON1) & ~(GREEN_PEATON2);
 
         if (boton == 1)
         {
-            // _delay_ms(3000);
-            // delay()
             estado_actual = blink_vehicular;
         }
-        // estado_actual = blink_vehicular;
         break;
 
     case blink_vehicular:
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 6; i++)
         {
             PORTB ^= (1 << GREEN_VEHICULAR);
-            _delay_ms(3000);
+            delay(0.5);
         }
         estado_actual = detener_trafico;
         break;
 
     case detener_trafico:
+        delay(1);
         PORTB &= ~(1 << GREEN_VEHICULAR);
-        _delay_ms(1000);
-        PORTB |= (1 << RED_VEHICULAR) | (1 << GREEN_PEATON1) | (1 << GREEN_PEATON2);
+        PORTB |= (1 << RED_VEHICULAR);
+
+        delay(0.01);
+
+        PORTB |= (1 << GREEN_PEATON1) | (1 << GREEN_PEATON2);
         PORTB &= ~(1 << RED_PEATON1) & ~(1 << RED_PEATON2);
-        _delay_ms(10000); // Espero 10 segundos
+        delay(10);
         estado_actual = blink_peatonal;
         break;
 
     case blink_peatonal:
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 6; i++)
         {
             PORTB ^= (1 << GREEN_PEATON1) ^ (1 << GREEN_PEATON2);
-            _delay_ms(3000);
+            delay(0.5);
         }
+        PORTB &= ~(1 << GREEN_PEATON1) & ~(1 << GREEN_PEATON2);
+        PORTB |= (RED_PEATON1);
+        delay(1);
+        boton = 0;
         estado_actual = esperando_boton;
         break;
     }
