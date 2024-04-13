@@ -25,9 +25,6 @@ volatile int boton;
 int estado_actual = esperando_boton;
 
 volatile int segs = 0;
-// int un_seg = 0; // Un acumulador 
-// int tres_segs = 0;
-// int diez_segs = 0;
 
 // Preambulo de funciones
 void boton_init();
@@ -44,16 +41,7 @@ ISR(INT0_vect){ // Subrutina que alterna B1 entre 1 y 0
 }
 
 ISR(TIMER1_COMPA_vect){
-    // segs = segs + 10;
     segs++;
-    // if (segs >= 3*188) // Un segundo
-    // {
-    //     /* code */
-    //     PORTB |= (1 << RED_PEATON1); // Sí funciona
-    //     // segs = 0;
-    //     // PORTB &= ~(1 << RED_PEATON1);
-    // }
-    
 }
 
 // Inicio de la función main
@@ -77,45 +65,7 @@ int main(void)
 
     while (1)
     {
-        // delay(3);
-        // PORTB |= (1 << GREEN_VEHICULAR);
-        // delay(1000);
-        // PORTB &= ~(1 << RED_PEATON1);
-        // delay(1000);
         fsm();
-        // PORTB |= (1 << GREEN_VEHICULAR);
-        // delay(0.01);
-        // PORTB |= (1 << RED_PEATON1);
-        // PORTB |= (1 << RED_PEATON2);
-
-        // // _nop();
-        // // PORTB |= (1 << RED_PEATON1) | (1 << RED_PEATON2);
-        // PORTB &= ~(1 << RED_VEHICULAR) & ~(GREEN_PEATON1) & ~(GREEN_PEATON2);
-
-        // if (boton == 1)
-        // {
-        //     for (int i = 0; i < 6; i++)
-        //     {
-        //         PORTB ^= (1 << GREEN_VEHICULAR);
-        //         delay(0.5);
-        //     }
-        //     PORTB = 0x00;
-        // }
-        
-        // if (boton == 1)
-        // {
-        //     for (int i = 0; i < 6; i++)
-        //     {
-        //         PORTB ^= (1 << RED_PEATON1);
-        //         // PORTB ^= (1 << RED_PEATON2) ^ (1 << RED_VEHICULAR);
-        //         // _delay_ms(2000);
-        //         delay(0.5);
-        //     }
-        //     boton = 0;
-        // } else
-        // {
-        //     PORTB &= ~(1 << RED_PEATON1);
-        // }
     }
 }
 
@@ -176,12 +126,10 @@ void fsm(){
         break;
 
     case detener_trafico:
-        delay(1);
         PORTB &= ~(1 << GREEN_VEHICULAR);
         PORTB |= (1 << RED_VEHICULAR);
-
         delay(0.01);
-
+        delay(1);
         PORTB |= (1 << GREEN_PEATON1) | (1 << GREEN_PEATON2);
         PORTB &= ~(1 << RED_PEATON1) & ~(1 << RED_PEATON2);
         delay(10);
@@ -194,7 +142,8 @@ void fsm(){
             PORTB ^= (1 << GREEN_PEATON1) ^ (1 << GREEN_PEATON2);
             delay(0.5);
         }
-        PORTB &= ~(1 << GREEN_PEATON1) & ~(1 << GREEN_PEATON2);
+        delay(0.01);
+        PORTB &= ~(1 << GREEN_PEATON1) & ~(1 << GREEN_PEATON2) & ~(1 << RED_VEHICULAR);
         PORTB |= (RED_PEATON1);
         delay(1);
         boton = 0;
