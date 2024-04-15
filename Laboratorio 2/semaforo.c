@@ -51,7 +51,6 @@ int main(void)
 {
     boton_init();
     sei();
-    // timer_init();
 
     TCCR1B = 0x00;
     TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); // Esto me activa el prescaler de 1024 y el modo CTC
@@ -93,8 +92,8 @@ void detenido(){
     PORTB |= (1 << RED_PEATON1) | (1 << RED_PEATON2) | (1 << RED_VEHICULAR);
 }
 
-void delay(float seconds) { // Esta función sirve
-    segs = 0; // Reseteo a la variable segs
+void delay(float seconds) {
+    segs = 0;
     while (segs < 188*seconds) { 
         // No haga nada
     }
