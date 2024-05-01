@@ -11,6 +11,7 @@ PCD8544 lcd;
 double input, output, setpoint;
 
 // PID myPID(&input, &output, &setpoint, )
+// Implementación del PID
 
 void LCD_state(){
   int switchState = analogRead(A1);  
