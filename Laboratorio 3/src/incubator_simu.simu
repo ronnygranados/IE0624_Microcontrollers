@@ -38,7 +38,7 @@ Circuit Id: Tunnel-80
 
 Unique  Id: Potentiometer-71: 
 Circuit Id: Potentiometer-71
-<item x="124" Unit=" kΩ" Resistance="1" hflip="-1" valLabRot="0" valLabelx="10" circRot="-5.486129280331905e+303" itemtype="Potentiometer" circPos="0,0" id="Potentiometer-71" labelx="-16" Show_id="false" Value_Ohm="256" valLabely="-20" labelrot="0" boardPos="-1e+06,-1e+06" labely="-40" objectName="Potentiometer-71" vflip="1" y="-176" rotation="-90" mainComp="false" Show_res="true" boardRot="-1e+06"/>
+<item x="124" Unit=" kΩ" Resistance="1" hflip="-1" valLabRot="0" valLabelx="10" circRot="-5.486129280331905e+303" itemtype="Potentiometer" circPos="0,0" id="Potentiometer-71" labelx="-16" Show_id="false" Value_Ohm="173" valLabely="-20" labelrot="0" boardPos="-1e+06,-1e+06" labely="-40" objectName="Potentiometer-71" vflip="1" y="-176" rotation="-90" mainComp="false" Show_res="true" boardRot="-1e+06"/>
 
 Unique  Id: Pcd8544-60: 
 Circuit Id: Pcd8544-60
@@ -118,7 +118,7 @@ Circuit Id: Node-225
 
 Unique  Id: SerialPort-9: 
 Circuit Id: SerialPort-9
-<item FlowControl="0" x="-32" Mcu_Id="Arduino Uno-1" Parity="0" Port_Name="COM2" hflip="1" valLabRot="0" valLabelx="0" StopBits="1" circRot="6.650045584796332e+246" itemtype="SerialPort" circPos="0,0" id="SerialPort-9" labelx="-34" Show_id="false" valLabely="0" labelrot="0" boardPos="-1e+06,-1e+06" labely="-20" objectName="SerialPort-9" vflip="1" BaudRate="9600" y="-460" DataBits="8" rotation="0" Mcu_Uart="1" mainComp="false" boardRot="-1e+06" Auto_Open="false"/>
+<item FlowControl="0" x="-32" Mcu_Id="Arduino Uno-1" Parity="0" Port_Name="COM1" hflip="1" valLabRot="0" valLabelx="0" StopBits="1" circRot="6.650045584796332e+246" itemtype="SerialPort" circPos="0,0" id="SerialPort-9" labelx="-34" Show_id="false" valLabely="0" labelrot="0" boardPos="-1e+06,-1e+06" labely="-20" objectName="SerialPort-9" vflip="1" BaudRate="9600" y="-408" DataBits="8" rotation="0" Mcu_Uart="1" mainComp="false" boardRot="-1e+06" Auto_Open="false"/>
 
 Unique  Id: Connector-66: 
 Circuit Id: Connector-66

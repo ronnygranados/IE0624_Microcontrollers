@@ -10,7 +10,7 @@ PCD8544 lcd;
 
 double Input, Output, Setpoint;
 
-PID myPID(&Input, &Output, &Setpoint, 10, 2, 1, DIRECT);
+PID myPID(&Input, &Output, &Setpoint, 15, 0.5, 1, DIRECT);
 // Implementación del PID
 
 void setup() {
@@ -52,9 +52,24 @@ void loop() {
 
   lcd.setCursor(0, 3);
   lcd.print("Temp: "); lcd.print(Input);
+
+  int commSwitch = analogRead(A2);
+
+  if(commSwitch > 700){
+    Serial.print(Setpoint);
+    Serial.print(",");
+    Serial.print(Output);
+    Serial.print(",");
+    Serial.println(Input); 
+    delay(500);
+  }
   
-  // Graficando señales
-  Serial.println(Setpoint); Serial.println(Output); Serial.println(Input); 
+  // // Graficando señales
+  // Serial.print(Setpoint);
+  // Serial.print(",");
+  // Serial.print(Output);
+  // Serial.print(",");
+  // Serial.println(Input); 
   delay(500);
 
   if(Input < 30){
