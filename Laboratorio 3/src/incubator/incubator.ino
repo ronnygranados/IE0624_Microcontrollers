@@ -6,13 +6,15 @@
 #define GREEN 12
 #define RED 13
 
+// Implementación de la pantalla
 PCD8544 lcd;
 
+// Implementación del PID
 double Input, Output, Setpoint;
 
 PID myPID(&Input, &Output, &Setpoint, 15, 0.5, 1, DIRECT);
-// Implementación del PID
 
+// SETUP
 void setup() {
   Serial.begin(9600);
   // Establezco el tipo de pin que quiero 
@@ -26,9 +28,9 @@ void setup() {
   myPID.SetMode(AUTOMATIC);
 }
 
+// LOOP
 void loop() {
   LCD_state();
-  // lcd.clear();
 
   // Definición del SETPOINT
   int value = analogRead(A0);
@@ -40,7 +42,7 @@ void loop() {
   float tempWatts = (int)Output*25.0/255.0;
   Input = simPlant(tempWatts);
 
-
+  // Se llama al PID
   myPID.Compute();
 
   // Mostrar en LCD
@@ -55,6 +57,7 @@ void loop() {
 
   int commSwitch = analogRead(A2);
 
+  // Interrupción de las comunicaciones
   if(commSwitch > 700){
     Serial.print(Setpoint);
     Serial.print(",");
@@ -63,23 +66,24 @@ void loop() {
     Serial.println(Input); 
     delay(500);
   }
-  
-  // // Graficando señales
-  // Serial.print(Setpoint);
-  // Serial.print(",");
-  // Serial.print(Output);
-  // Serial.print(",");
-  // Serial.println(Input); 
   delay(500);
 
+  // Activación de los LEDs indicadores de temperatura
   if(Input < 30){
-    digitalWrite(BLUE, HIGH); digitalWrite(RED, LOW); digitalWrite(GREEN, LOW);
+    digitalWrite(BLUE, HIGH); 
+    digitalWrite(RED, LOW); 
+    digitalWrite(GREEN, LOW);
   } else if(Input > 42){
-    digitalWrite(RED, HIGH); digitalWrite(GREEN, LOW); digitalWrite(BLUE, LOW);
+    digitalWrite(RED, HIGH); 
+    digitalWrite(GREEN, LOW); 
+    digitalWrite(BLUE, LOW);
   } else{
-    digitalWrite(GREEN, HIGH); digitalWrite(RED, LOW); digitalWrite(BLUE, LOW);
+    digitalWrite(GREEN, HIGH); 
+    digitalWrite(RED, LOW); 
+    digitalWrite(BLUE, LOW);
   }
 }
+// Inicio de funciones adicionales
 
 void LCD_state(){
   int switchState = analogRead(A1);  
